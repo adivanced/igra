@@ -185,7 +185,10 @@ end
 @inventory[@iron_great_sword.item_inv_nbr][@iron_great_sword] = 0
 @inventory[@iron_mace.item_inv_nbr][@iron_mace] = 0
 @inventory[@iron_dagger.item_inv_nbr][@iron_dagger] = 0
-#@inventory
+@inventory[@thief_clothing.item_inv_nbr][@thief_clothing] = 0
+@inventory[@knight_armour.item_inv_nbr][@knight_armour] = 0
+@inventory[@magician_robe.item_inv_nbr][@magician_robe] = 0
+@inventory[@bounty_hunter_clothing.item_inv_nbr][@bounty_hunter_clothing] = 0
 
 puts 'healing pills(costs 50 of gold)   (insert 1)'
 puts 'loaf of bread(costs 5 of gold)   (insert 2)'
@@ -349,6 +352,26 @@ def unequip_weapon
 end
 
 
+def equip_weapon
+	print 'insert an weapon name:  '
+	itemname = gets.chomp
+	@player.player_inventory. each do |smth|
+		if smth != {}
+			smth.keys.each do |diff|
+				if smth[diff] != 0 and diff.item_name == itemname
+					@player.player_weapon = diff
+					smth[diff] -= 1
+					puts 'equiped!!!'
+				end
+			end
+		end
+	end
+end
+
+
+
+
+
 def show_commands
 puts"======================================================================================="
 puts "ALL COMMANDS IN OUR GAME:"
@@ -359,8 +382,9 @@ puts "show inventory => show your gold & inventory"
 puts "show everything => show stats, inventory, equipment"
 puts "description => insert itemname = > show item description"
 puts "exit the game => leave the game(no saves(at least yet))"
-puts "drop item => item is deleted from inventory"
+puts "drop item =>insert item name and item amount => item is deleted from inventory"
 puts "unequip weapon => insert weapon name => unequips weapon"
+puts "equip weapon => insert weapon name => equips weapon"
 puts"======================================================================================="
 end
 
@@ -396,6 +420,9 @@ while true
 	end
 	if @console == "unequip weapon"
 		unequip_weapon
+	end
+	if @console == "equip weapon"
+		equip_weapon
 	end
 
 end
