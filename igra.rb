@@ -241,12 +241,17 @@ def show_inventory
 	puts 'YOUR INVENTORY'
 	@player.player_inventory.each do |smth|
 		smth.keys.each do |diff|
-			if smth != {} and smth[diff] != 0
+			if smth != {} and smth[diff] != 0 and smth[diff] != @player.player_clothing and smth[diff] != @player.player_weapon
 				puts "#{diff.item_name} X#{smth[diff]},  is usable? = #{diff.is_usable}"
 				namnot = diff.item_name
 			end	
 		        if @player.player_weapon != "bare fists"
 				if smth != {} && diff.item_name == @player_weapon.item_name
+					puts "#{diff.item_name} X#{smth[diff].to_i + 1},  is usable? = #{diff.is_usable}"
+				end
+			end
+			if @player.player_clothing != "bare body"
+				if smth != {} && diff.item_name == @player_clothing.item_name
 					puts "#{diff.item_name} X#{smth[diff].to_i + 1},  is usable? = #{diff.is_usable}"
 				end
 			end	
@@ -262,7 +267,10 @@ def show_equipment
 		puts "weapon: #{@player.player_weapon.item_name}"
 	else puts "weapon: #{@player.player_weapon}"
 	end
-	puts "clothing: #{@player.player_clothing.item_name} "
+	if @player.player_clothing != "bare body"
+		puts "clothing: #{@player.player_clothing.item_name} "
+	else puts "clothing: #{@player.player_clothing}"
+	end
 end
 
 def show_stats
@@ -368,8 +376,43 @@ def equip_weapon
 	end
 end
 
+def unequip_clothing
+	print 'insert a clothes name:  '
+	itemname = gets.chomp
+	@player.player_inventory.each do |smth|
+		if smth != {}
+			smth.keys.each do |diff|
+				if diff.item_name == itemname
+					if @player.player_clothing.item_name == itemname
+						@player.player_clothing = "bare body" 
+						smth[diff] += 1
+				                puts 'unequiped!!!'
+					end
+				end
 
 
+			end
+
+		end
+	end
+end
+
+
+def equip_clothing
+	print 'insert an clothes name:  '
+	itemname = gets.chomp
+	@player.player_inventory. each do |smth|
+		if smth != {}
+			smth.keys.each do |diff|
+				if smth[diff] != 0 and diff.item_name == itemname
+					@player.player_clothing = diff
+					smth[diff] -= 1
+					puts 'equiped!!!'
+				end
+			end
+		end
+	end
+end
 
 
 def show_commands
@@ -382,9 +425,11 @@ puts "show inventory => show your gold & inventory"
 puts "show everything => show stats, inventory, equipment"
 puts "description => insert itemname = > show item description"
 puts "exit the game => leave the game(no saves(at least yet))"
-puts "drop item =>insert item name and item amount => item is deleted from inventory"
+puts "drop item => insert item name and item amount => item is deleted from inventory"
 puts "unequip weapon => insert weapon name => unequips weapon"
 puts "equip weapon => insert weapon name => equips weapon"
+puts "equip clothes => insert clothes name => equips clothing"
+puts "unequip clothes => insert clothes name => unequips clothing"
 puts"======================================================================================="
 end
 
@@ -424,9 +469,13 @@ while true
 	if @console == "equip weapon"
 		equip_weapon
 	end
-
+	if @console == "equip clothes"
+		equip_clothing
+	end
+	if  @console == "unequip clothes"
+		unequip_clothing
+	end
 end
-
 
 
 
