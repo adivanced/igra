@@ -17,7 +17,7 @@ class Player
 end
 class Clothingitem	
 	attr_accessor :item_description, :item_name, :item_price, :item_inv_nbr, :is_usable, :clothes_protection
-	def initialize(item_description, item_name, item_price, item_inv_nbr, is_usable, clothes_name)
+	def initialize(item_description, item_name, item_price, item_inv_nbr, is_usable, clothes_protection)
 		@item_description = item_description
 		@item_name = item_name
 	        @item_price = item_price
@@ -72,15 +72,18 @@ end
 @iron_straight_sword = Weaponitem.new( 'simple straight sword, made of iron. deals 23 0f damage. costs 50 of gold', "iron straight sword", 50, 4, "equipable as weapon", 23, "D", "D")
 @iron_great_sword = Weaponitem.new('not every human can use this giant sword. made of iron. deals 46 of damage, costs 75 of gold', "iron great sword", 75, 5, "equipable as weapon", 46, "E", "B")
 @iron_mace = Weaponitem.new('mace, made of iron. perfect balance between damage and speed. deals 30 of damage. costs 65 of gold' ,"iron mace", 65, 6, "equipable as weapon", 30, "D", "C")
-@iron_dagger = Weaponitem.new('dagger, perfect fo stabbing someone in the back. made of iron. deals 15 of damage, costs 40 of gold', "iron dagger", 40, 7, "equipable as weapon", 15,, "B", "E") 
+@iron_dagger = Weaponitem.new('dagger, perfect fo stabbing someone in the back. made of iron. deals 15 of damage, costs 40 of gold', "iron dagger", 40, 7, "equipable as weapon", 15, "B", "E") 
+
 
 @player_weapon = 0
 @player_clothing = 0 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!  PEREVESTI CLOTHING V ITEM, SDELAT EQUIP WEAPON, SDELAT UNEQUIP I EQUIP CLOTHING     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-@thief_clothing
-@knight_armour = Clothing.new(50, "knight armour")
-@magician_robe = Clothing.new(10, "magician robe")
-@bounty_hunter_clothing = Clothing.new(25, "bounty hunter clothing")
+
+
+@thief_clothing = Clothingitem.new("clothes, worn by thiefs. has a bad protection(15), but ideal for sneaking, costs nothing. no one will agree to buy it", "thief_clothing", "refuse", 8, "equipable as clothing", 15)   
+@knight_armour = Clothingitem.new("armor, worn by knights. really heavy, but has  a giant amount of protection(50)", "knight armour", 250, 9, "equipable as clothing", 50)
+@magician_robe = Clothingitem.new("robe, worn by magicians. aufull protection(10), costs 300 of gold", "magician robe", 300, 10, "equipable as clothing", 10)
+@bounty_hunter_clothing = Clothingitem.new("skilled bounty hunters wear this clothes.has a balanced protection(25), costs 150 of gold", "bounty hunter clothing", 150, 11, "equipable as clothing", 25)
 
 
 @healing_pills = Healingitem.new('magic pills, that produce energy, which helps travellers in their journey. regenerates 25 hp, cost 50 of gold', 'healing pills', 50, 0, 25, "yes") 
@@ -129,18 +132,18 @@ def pick_clothing
 	puts 'here are our clothings : knight armor(50)(insert 1), thief clothing(15)(insert 2), magician robe(10)(insert 3), bounty hunters clothing(25)(insert 4)'
 	puts "wich one you choose? #{@chose = gets.to_i}"
 	if @chose == 1
-		@player_clothing = Clothing.new(@knight_armour.clothes_protection, @knight_armour.clothes_name)
+		@player_clothing = @knight_armour
 	end	
 	if @chose == 2 
-		@palyer_clothing =  Clothing.new(@thief_clothing.clothes_protection, @thief_clothing.clothes_name)	
+		@palyer_clothing = @thief_clothing	
 	end 
 	if @chose == 3 
-		@player_clothing = Clothing.new(@magician_robe.clothes_protection, @magician_robe.clothes_name) 
+		@player_clothing = @magician_robe
 	end
 	if @chose == 4
-		@player_clothing = Clothing.new(@bounty_hunter_clothing.clothes_protection,  @bounty_hunter_clothing.clothes_name) 
+		@player_clothing = @bounty_hunter_clothing
 	end
-	puts "#{@player_clothing.clothes_name} is your choise"
+	puts "#{@player_clothing.item_name} is your choise"
 
 end
 
@@ -148,16 +151,16 @@ def pick_weapon
 	puts 'now pick a weapon : iron straight sword(23)(insert 1), iron great sword(46)(insert 2), iron mace(30)(insert 3), iron dagger(15)(insert 4) '
 	puts "what is your choise? #{@chose2=gets.to_i}"
 	if @chose2 == 1
-		@player_weapon = Weaponitem.new(@iron_straight_sword.item_description, @iron_straight_sword.item_name, @iron_straight_sword.item_price, @iron_straight_sword.item_inv_nbr, @iron_straight_sword.is_usable, @iron_straight_sword.weapon_damage)
+		@player_weapon = @iron_straight_sword
 	end	  
 	if @chose2 == 2
-                @player_weapon = Weaponitem.new(@iron_great_sword.item_description, @iron_great_sword.item_name, @iron_great_sword.item_price, @iron_great_sword.item_inv_nbr, @iron_great_sword.is_usable, @iron_great_sword.weapon_damage)  
+                @player_weapon = @iron_great_sword
 	end
 	if @chose2 == 3
-	        @player_weapon = Weaponitem.new(@iron_mace.item_description, @iron_mace.item_name, @iron_mace.item_price, @iron_mace.item_inv_nbr, @iron_mace.is_usable, @iron_mace.weapon_damage,) 
+	        @player_weapon = @iron_mace
 	end
 	if @chose2 == 4
-                @player_weapon = Weaponitem.new(@iron_dagger.item_description, @iron_dagger.item_name, @iron_dagger.item_price, @iron_dagger.item_inv_nbr, @iron_dagger.is_usable, @iron_dagger.weapon_damage)
+                @player_weapon = @iron_dagger
 	end
 	puts "#{@player_weapon.item_name} is your choise"
 
@@ -256,7 +259,7 @@ def show_equipment
 		puts "weapon: #{@player.player_weapon.item_name}"
 	else puts "weapon: #{@player.player_weapon}"
 	end
-	puts "clothing: #{@player.player_clothing.clothes_name} "
+	puts "clothing: #{@player.player_clothing.item_name} "
 end
 
 def show_stats
