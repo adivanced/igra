@@ -66,7 +66,8 @@ class Weaponitem
 	end
 end
 
-
+@barefists = Weaponitem.new('bare fists, lol, why would you try to see its description?', "bare fists", "refuse", 'lol',  "what?", 0, "F", "F")
+@barebody = Clothingitem.new('bare body, lol', "bare body", "refuse", 'lol', "what?", 0) 
 
 
 @iron_straight_sword = Weaponitem.new( 'simple straight sword, made of iron. deals 23 0f damage. costs 50 of gold', "iron straight sword", 50, 4, "equipable as weapon", 23, "D", "D")
@@ -245,12 +246,12 @@ def show_inventory
 				puts "#{diff.item_name} X#{smth[diff]},  is usable? = #{diff.is_usable}"
 				namnot = diff.item_name
 			end	
-		        if @player.player_weapon != "bare fists"
+		        if @player.player_weapon != @barefists
 				if smth != {} && diff.item_name == @player_weapon.item_name
 					puts "#{diff.item_name} X#{smth[diff].to_i + 1},  is usable? = #{diff.is_usable}"
 				end
 			end
-			if @player.player_clothing != "bare body"
+			if @player.player_clothing != @barebody
 				if smth != {} && diff.item_name == @player_clothing.item_name
 					puts "#{diff.item_name} X#{smth[diff].to_i + 1},  is usable? = #{diff.is_usable}"
 				end
@@ -263,13 +264,13 @@ end
 
 def show_equipment
 	puts 'YOUR EQUIPMENTS:'
-	if @player.player_weapon != "bare fists"
+	if @player.player_weapon != @barefists
 		puts "weapon: #{@player.player_weapon.item_name}"
-	else puts "weapon: #{@player.player_weapon}"
+	else puts "weapon: #{@player.player_weapon.item_name}"
 	end
-	if @player.player_clothing != "bare body"
+	if @player.player_clothing != @barebody
 		puts "clothing: #{@player.player_clothing.item_name} "
-	else puts "clothing: #{@player.player_clothing}"
+	else puts "clothing: #{@player.player_clothing.item_name}"
 	end
 end
 
@@ -297,17 +298,25 @@ def show_item_description
 			        smth.keys.each do |key|
 					if smth != {} and smth[key] != 0
 					
-						if key.item_name == itemname 
-							#puts "#{smth[0].item_name}"
+						if key.item_name == itemname and @player.player_weapon.item_name != itemname and     @player.player_clothing.item_name != itemname  							#puts "#{smth[0].item_name}"
 								puts "#{key.item_description}"            
 						end
-				
-					end
+											end
 
 				end
+				
+
+						
 
 
 			end
+	if  itemname == @player.player_weapon.item_name 
+		puts "#{@player.player_weapon.item_description}"
+	end
+	if @player.player_clothing.item_name == itemname
+		puts "#{@player.player_clothing.item_description}"
+	end							
+			
 end
 
 def drop_item 
@@ -346,7 +355,7 @@ def unequip_weapon
 			smth.keys.each do |diff|
 				if diff.item_name == itemname
 					if @player.player_weapon.item_name == itemname
-						@player.player_weapon = "bare fists" 
+						@player.player_weapon = @barefists 
 						smth[diff] += 1
 				                puts 'unequiped!!!'
 					end
@@ -384,7 +393,7 @@ def unequip_clothing
 			smth.keys.each do |diff|
 				if diff.item_name == itemname
 					if @player.player_clothing.item_name == itemname
-						@player.player_clothing = "bare body" 
+						@player.player_clothing = @barebody 
 						smth[diff] += 1
 				                puts 'unequiped!!!'
 					end
@@ -416,21 +425,21 @@ end
 
 
 def show_commands
-puts"======================================================================================="
-puts "ALL COMMANDS IN OUR GAME:"
-puts "commands => show all commands"
-puts "show stats => show player stats"
-puts "show equipment => show player equipment"
-puts "show inventory => show your gold & inventory"                                              
-puts "show everything => show stats, inventory, equipment"
-puts "description => insert itemname = > show item description"
-puts "exit the game => leave the game(no saves(at least yet))"
-puts "drop item => insert item name and item amount => item is deleted from inventory"
-puts "unequip weapon => insert weapon name => unequips weapon"
-puts "equip weapon => insert weapon name => equips weapon"
-puts "equip clothes => insert clothes name => equips clothing"
-puts "unequip clothes => insert clothes name => unequips clothing"
-puts"======================================================================================="
+puts"====================================================================================================================================="
+puts "ALL COMMANDS IN OUR GAME:                                                                                                          |" 
+puts "commands => show all commands                                                                                                      |" 
+puts "show stats => show player stats                                                                                                    |"
+puts "show equipment => show player equipment                                                                                            |"
+puts "show inventory => show your gold & inventory                                                                                       |"
+puts "show everything => show stats, inventory, equipment                                                                                |"
+puts "description => insert itemname = > show item description                                                                           |"
+puts "exit the game => leave the game(no saves(at least yet))                                                                            |"
+puts "drop item => insert item name and item amount => item is deleted from inventory !!!!! weapon or clothes unequip if want drop !!!!  |"
+puts "unequip weapon => insert weapon name => unequips weapon                                                                            |"
+puts "equip weapon => insert weapon name => equips weapon                                                                                |"
+puts "equip clothes => insert clothes name => equips clothing                                                                            |"
+puts "unequip clothes => insert clothes name => unequips clothing                                                                        |"
+puts"====================================================================================================================================="
 end
 
 show_commands
