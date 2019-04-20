@@ -78,7 +78,6 @@ end
 
 @player_weapon = 0
 @player_clothing = 0 
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!  PEREVESTI CLOTHING V ITEM, SDELAT EQUIP WEAPON, SDELAT UNEQUIP I EQUIP CLOTHING     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 @thief_clothing = Clothingitem.new("clothes, worn by thiefs. has a bad protection(15), but ideal for sneaking, costs nothing. no one will agree to buy it", "thief_clothing", "refuse", 8, "equipable as clothing", 15)   
