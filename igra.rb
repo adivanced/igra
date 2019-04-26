@@ -17,8 +17,6 @@ class Player
 end
 
 
-
-
 class Clothingitem	
 	attr_accessor :item_description, :item_name, :item_price, :item_inv_nbr, :is_usable, :clothes_protection
 	def initialize(item_description, item_name, item_price, item_inv_nbr, is_usable, clothes_protection)
