@@ -11,10 +11,14 @@ class Player
 		@player_clothing = player_clothing
 		@player_inventory = player_inventory
 		@player_gold=player_gold
-	        @player_dyn_hp = player_dyn_hp
+	  @player_dyn_hp = player_dyn_hp
 		@player_dyn_mana = player_dyn_mana
 	end
 end
+
+
+
+
 class Clothingitem	
 	attr_accessor :item_description, :item_name, :item_price, :item_inv_nbr, :is_usable, :clothes_protection
 	def initialize(item_description, item_name, item_price, item_inv_nbr, is_usable, clothes_protection)
@@ -45,8 +49,8 @@ class Healingitem
 	def initialize(item_description, item_name, item_price, item_inv_nbr, item_heal, is_usable)
 		@item_description = item_description
 		@item_name = item_name
-	        @item_price = item_price
-	        @item_inv_nbr = item_inv_nbr
+	  @item_price = item_price
+	  @item_inv_nbr = item_inv_nbr
 		@item_heal = item_heal
 		@is_usable = is_usable
 	end
@@ -55,16 +59,56 @@ end
 class Weaponitem
 	attr_accessor :item_description, :item_name, :item_price, :item_inv_nbr, :is_usable, :weapon_damage, :dex_scale, :strength_scale
 	def initialize(item_description, item_name, item_price, item_inv_nbr, is_usable, weapon_damage, dex_scale, strength_scale)
-                @item_description = item_description
+    @item_description = item_description
 		@item_name = item_name
-	        @item_price = item_price
-	        @item_inv_nbr = item_inv_nbr
-	        @is_usable = is_usable
+	  @item_price = item_price
+	  @item_inv_nbr = item_inv_nbr
+	  @is_usable = is_usable
 		@weapon_damage = weapon_damage
 		@dex_scale = dex_scale
 		@strength_scale = strength_scale
 	end
 end
+class Enemy
+	attr_accessor :enemy_type, :enemy_weapon, :enemy_clothing, :enemy_name, :enemy_hp, :enemy_dyn_hp, :enemy_mana, :enemy_dyn_mana, :enemy_dexility, :enemy_strength, :enemy_gold
+		def initialize(enemy_type, enemy_weapon, enemy_clothing, enemy_name, enemy_hp, enemy_dyn_hp, enemy_mana, enemy_dyn_mana, enemy_dexility, enemy_strength, enemy_gold)
+			@enemy_type = enemy_type
+			@enemy_weapon = enemy_weapon
+			@enemy_clothing = enemy_clothing
+			@enemy_name = enemy_name
+			@enemy_hp = enemy_hp
+			@enemy_dyn_hp = enemy_dyn_hp
+			@enemy_mana = enemy_dyn_mana
+			@enemy_dexility = enemy_dexility
+			@enemy_strength = enemy_strength
+			@enemy_gold = enemy_gold
+		end
+end
+
+
+class Location
+	attr_accessor :location_description, :playerhere, :location_name, :location_places 
+	def initialize(location_description, playerhere, location_name, location_places)
+		@location_description = location_description
+		@playerhere = playerhere
+		@location_name = location_name
+		@location_places = location_places
+	end
+end
+
+class Place
+	attr_accessor :place_name, :place_description, :place_items, :place_enemies, :place_go_out, :playerhere
+	def initialize(place_name, place_description, place_items, place_enemies, place_go_out, playerhere)
+		@place_name = place_name
+		@place_description = place_description
+		@place_items = place_items
+		@place_enemies = place_enemies
+		@place_go_out = place_go_out
+		@playerhere = playerhere
+	end
+end
+
+
 
 @barefists = Weaponitem.new('bare fists, lol, why would you try to see its description?', "bare fists", "refuse", 'lol',  "what?", 0, "F", "F")
 @barebody = Clothingitem.new('bare body, lol', "bare body", "refuse", 'lol', "what?", 0) 
@@ -80,7 +124,7 @@ end
 @player_clothing = 0 
 
 
-@thief_clothing = Clothingitem.new("clothes, worn by thiefs. has a bad protection(15), but ideal for sneaking, costs nothing. no one will agree to buy it", "thief_clothing", "refuse", 8, "equipable as clothing", 15)   
+@thief_clothing = Clothingitem.new("clothes, worn by thiefs. has a bad protection(15), but good for sneak. no one will buy it", "thief clothing", "refuse", 8, "equipable as clothing", 15)
 @knight_armour = Clothingitem.new("armor, worn by knights. really heavy, but has  a giant amount of protection(50)", "knight armour", 250, 9, "equipable as clothing", 50)
 @magician_robe = Clothingitem.new("robe, worn by magicians. aufull protection(10), costs 300 of gold", "magician robe", 300, 10, "equipable as clothing", 10)
 @bounty_hunter_clothing = Clothingitem.new("skilled bounty hunters wear this clothes.has a balanced protection(25), costs 150 of gold", "bounty hunter clothing", 150, 11, "equipable as clothing", 25)
@@ -91,9 +135,28 @@ end
 @masterkey = Item.new(' good old masterkey.be careful with it. for using this simple thing for too much, you may be inprisoned!, costs 10 of gold', 'masterkey', 10, 2, "no")
 @loaf_of_bread = Healingitem.new('a freshly bake... an old and hard loaf of bread. you must be starving, if you decided to eat it.regens 5 hp. costs 5 of gold' , 'loaf of bread', 5, 3, 5, "yes") 
 
+@vortex_peak_enter = Place.new("vortex peak enter", " an edge of a cliff. really beautiful sight out from here. you can see somethi... No. too far to see anything.", [], [], true, false)
+@vortex_peak_exit = Place.new("vortex peak exit", "a tunnel, wich goes into a cave. a bit dark ot in it", [], [], false, false)
 
-@stats = 20
+
+@vortex_peak = Location.new("an antient mysterious peak, out of where, by some reason, strangers  sometimes go out of. strangers who dont remember anything about who are they orr why are they here...", false, "vortex peak", [@vortex_peak_enter, @vortex_peak_exit])
+
+
+
+
+
+
+
+
+
+
+@locations =[]
+@locations << @vortex_peak
+
+
+
 def create_new_player
+	@stats = 20
 	puts 'hello, traveller!'
 	puts 'its time for you to create your hero!'
 	puts 'first you need to distribute your heroes stats'
@@ -135,7 +198,7 @@ def pick_clothing
 		@player_clothing = @knight_armour
 	end	
 	if @chose == 2 
-		@palyer_clothing = @thief_clothing	
+		@player_clothing = @thief_clothing	
 	end 
 	if @chose == 3 
 		@player_clothing = @magician_robe
@@ -330,9 +393,9 @@ def drop_item
 						                        
 								print 'how many?:  '
 								amount = gets.to_i
-                                                                if amount < smth[diff]
+                		if amount < smth[diff]
 									smth[diff] -= amount
-                                                                        puts "deleted!"
+                 		 puts "deleted!"
 
 								else puts "you dont have this much!"
 								end
@@ -422,6 +485,102 @@ def equip_clothing
 	end
 end
 
+def location_show
+	@locations.each do |smth|
+		if smth.playerhere == true 
+			
+			smth.location_places.each do |diff|
+				if diff.playerhere == true
+					puts "locatiomn : #{smth.location_name}, place : #{diff.place_name}, and you can go to:"
+				end
+			end
+		end
+	end
+	@locations.each do |smth|
+		if smth.playerhere == true 
+			smth.location_places.each do |diff|			
+				if diff.playerhere == false
+					puts "#{diff.place_name}"
+				end
+			end
+		end
+	end	
+end
+
+
+def go_to
+	print 'where do you want to go:  '
+	place = gets.chomp
+	@locations.each do |smth|
+		if smth.playerhere == true
+			smth.location_places.each do |diff|
+				if diff.playerhere == false and diff.place_name == place
+					diff.playerhere = true
+				end
+				if diff.playerhere == true and diff.place_name != place
+					diff.playerhere = false
+					puts "moved!"
+				end
+			end
+		end
+	end
+end
+
+
+
+
+
+def console
+	console = 0 
+	if @console == "commands"
+			show_commands
+		end
+		if @console == "show stats"
+			show_stats
+		end
+		if @console == "show equipment"
+			show_equipment
+		end
+		if @console == "show inventory"
+			show_inventory
+		end
+		if @console == "show everything"
+			show_everything
+		end
+		if @console == "description"
+			show_item_description	
+		end
+		if @console == "exit the game"
+			@vihod = 0
+		end
+		if @console == "drop item"
+			drop_item
+		end
+		if @console == "unequip weapon"
+			unequip_weapon
+		end
+		if @console == "equip weapon"
+			equip_weapon
+		end
+		if @console == "equip clothes"
+			equip_clothing
+		end
+		if  @console == "unequip clothes"
+			unequip_clothing
+		end
+		if @console == "show location"
+			location_show
+		end
+		if @console == "go to"
+			go_to
+		end
+
+		
+end
+
+
+
+
 
 def show_commands
 puts"====================================================================================================================================="
@@ -438,52 +597,24 @@ puts "unequip weapon => insert weapon name => unequips weapon                   
 puts "equip weapon => insert weapon name => equips weapon                                                                                |"
 puts "equip clothes => insert clothes name => equips clothing                                                                            |"
 puts "unequip clothes => insert clothes name => unequips clothing                                                                        |"
+puts "show location => name of location and place where you stand, and where you can go                                                  |"
+puts "go to => insert place name => player moves to another place                                                                        |"
 puts"====================================================================================================================================="
 end
 
 show_commands
+puts "ready? => insert ready to start your adventure"
+@console = gets.chomp
+if @console == "ready"
+	@vortex_peak.playerhere = true
+	@vortex_peak_enter.playerhere = true
+	location_show
+	while @vihod != 0 
 
-
-while true 
-
-	@console = gets.chomp
-	if @console == "commands"
-		show_commands
-	end
-	if @console == "show stats"
-		show_stats
-	end
-	if @console == "show equipment"
-		show_equipment
-	end
-	if @console == "show inventory"
-		show_inventory
-	end
-	if @console == "show everything"
-		show_everything
-	end
-	if @console == "description"
-		show_item_description	
-	end
-	if @console == "exit the game"
-		break
-	end
-	if @console == "drop item"
-		drop_item
-	end
-	if @console == "unequip weapon"
-		unequip_weapon
-	end
-	if @console == "equip weapon"
-		equip_weapon
-	end
-	if @console == "equip clothes"
-		equip_clothing
-	end
-	if  @console == "unequip clothes"
-		unequip_clothing
+		@console = gets.chomp
+		console
+		
 	end
 end
-
 
 
