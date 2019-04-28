@@ -484,13 +484,22 @@ def equip_clothing
 end
 
 def location_show
+	can = 0
 puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"	
 	@locations.each do |smth|																																														
-		if smth.playerhere == true 																																															
-			 																																																												
+		if smth.playerhere == true 																																																		 																																																												
 			smth.location_places.each do |diff|                                                                           
 				if diff.playerhere == true                                                                                       
 					puts "LOCATION : |#{smth.location_name}|, PLACE : |#{diff.place_name}|"
+					diff.place_items.each do |hh|
+						hh.keys.each do |key|
+							if hh[key] != 0
+								can = "yes"
+							else can = "no"
+							end
+						end
+					end
+					puts "can here be found any items? #{can}"	
 				end 																																																			
 			end 																																																						
 		end 																																																								
@@ -594,7 +603,7 @@ def search
 					sleep 0.65
 					print ". \n"
 					x = rand(0..100)
-					if x > 50 
+					if x >= 50 
 						you_found	
 					end
 					if x < 50
