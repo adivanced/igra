@@ -133,8 +133,8 @@ end
 @masterkey = Item.new(' good old masterkey.be careful with it. for using this simple thing for too much, you may be inprisoned!, costs 10 of gold', 'masterkey', 10, 2, "no")
 @loaf_of_bread = Healingitem.new('a freshly bake... an old and hard loaf of bread. you must be starving, if you decided to eat it.regens 5 hp. costs 5 of gold' , 'loaf of bread', 5, 3, 5, "yes") 
 
-@vortex_peak_enter = Place.new("vortex peak enter", " an edge of a cliff. really beautiful sight out from here. you can see somethi... No. too far to see anything.", [], [], true, false)
-@vortex_peak_exit = Place.new("vortex peak exit", "a tunnel, wich goes into a cave. a bit dark ot in it", [], [], false, false)
+@vortex_peak_enter = Place.new("vortex peak enter", " an edge of a cliff. really beautiful sight out from here. you can see somethi... No. too far to see anything.", [{@healing_pills => 2}], [], false, false)
+@vortex_peak_exit = Place.new("vortex peak exit", "a tunnel, wich goes into a cave. a bit dark ot in it", [], [], true, false)
 
 
 @vortex_peak = Location.new("an antient mysterious peak, out of where, by some reason, strangers  sometimes go out of. strangers who dont remember anything about who are they orr why are they here...", false, "vortex peak", [@vortex_peak_enter, @vortex_peak_exit])
@@ -391,7 +391,7 @@ def drop_item
 						                        
 								print 'how many?:  '
 								amount = gets.to_i
-                		if amount < smth[diff]
+                		if amount <= smth[diff]
 									smth[diff] -= amount
                  		 puts "deleted!"
 
@@ -484,25 +484,28 @@ def equip_clothing
 end
 
 def location_show
-	@locations.each do |smth|
-		if smth.playerhere == true 
-			
-			smth.location_places.each do |diff|
-				if diff.playerhere == true
-					puts "locatiomn : #{smth.location_name}, place : #{diff.place_name}, and you can go to:"
-				end
-			end
-		end
-	end
-	@locations.each do |smth|
-		if smth.playerhere == true 
-			smth.location_places.each do |diff|			
-				if diff.playerhere == false
-					puts "#{diff.place_name}"
+puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"	
+	@locations.each do |smth|																																														
+		if smth.playerhere == true 																																															
+			 																																																												
+			smth.location_places.each do |diff|                                                                           
+				if diff.playerhere == true                                                                                       
+					puts "LOCATION : |#{smth.location_name}|, PLACE : |#{diff.place_name}|"
+				end 																																																			
+			end 																																																						
+		end 																																																								
+	end 																																																										
+	@locations.each do |smth|																																																	
+		if smth.playerhere == true
+			puts "you can also go to this places:"																																													
+			smth.location_places.each do |diff|																																								
+				if diff.playerhere == false																																														
+					puts "|#{diff.place_name}| "                                                                        	
 				end
 			end
 		end
 	end	
+puts "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"	
 end
 
 
@@ -518,6 +521,7 @@ def go_to
 				if diff.playerhere == true and diff.place_name != place
 					diff.playerhere = false
 					puts "moved!"
+					
 				end
 			end
 		end
@@ -525,7 +529,82 @@ def go_to
 end
 
 
+def location_description
+	@locations.each do |smth|
+		if smth.playerhere == true
+			smth.location_places.each do |diff|
+				if diff.playerhere == true
+					puts "location description: |#{smth.location_description}|"
+					puts "place description: |#{diff.place_description}|"
+				end
+				end
+			end	
+		end	    					 
+end
 
+def you_found
+	@locations.each do |smth|
+		if smth.playerhere == true
+			smth.location_places.each do |diff|
+				if diff.playerhere == true
+						
+						if diff.place_items != [] 
+							z = diff.place_items.length - 1
+							y = rand(0..z)
+							diff.place_items[y].keys.each do |kye|
+								if diff.place_items[y][kye] != 0
+									print "you found  X#{diff.place_items[y][kye]} #{kye.item_name}! will you take it? (yes/no):   "
+									answ = gets.chomp
+										if answ == "yes"
+											@player.player_inventory.each do |elz|
+												elz.keys.each do |key|
+													if key == kye
+														elz[key] += diff.place_items[y][kye]
+														diff.place_items[y][kye] -= diff.place_items[y][kye]
+														puts "item added into your inventory"
+												end
+											end
+										end
+										else puts "ok, mabye youll take it later!" 
+									end
+								else puts "nothing to search here!"
+								end
+							end
+
+					end
+				end
+			end
+		end
+	end
+end	
+
+
+
+
+def search
+	@locations.each do |smth|
+		if smth.playerhere == true
+			smth.location_places.each do |diff|
+				if diff.playerhere == true
+					print "searching"
+					4.times do 
+						sleep 0.65
+						print"."
+					end
+					sleep 0.65
+					print ". \n"
+					x = rand(0..100)
+					if x > 50 
+						you_found	
+					end
+					if x < 50
+						puts "nothing found"
+					end
+				end
+			end
+		end
+	end
+end
 
 
 def console
@@ -566,11 +645,17 @@ def console
 		if  @console == "unequip clothes"
 			unequip_clothing
 		end
-		if @console == "show location"
+		if @console == "show location" or @console == "sl"
 			location_show
 		end
 		if @console == "go to"
 			go_to
+		end
+		if @console == "location description" or @console == "ld"
+			location_description
+		end
+		if @console == "search"
+			search
 		end
 
 		
@@ -595,8 +680,10 @@ puts "unequip weapon => insert weapon name => unequips weapon                   
 puts "equip weapon => insert weapon name => equips weapon                                                                                |"
 puts "equip clothes => insert clothes name => equips clothing                                                                            |"
 puts "unequip clothes => insert clothes name => unequips clothing                                                                        |"
-puts "show location => name of location and place where you stand, and where you can go                                                  |"
+puts "show location (or sl) => name of location and place where you stand, and where you can go                                          |"
 puts "go to => insert place name => player moves to another place                                                                        |"
+puts "location description (or ld) => show location and place description                                                                |"																															
+puts "search => you are trying to search some items in place, where you stand.                                                           |"
 puts"====================================================================================================================================="
 end
 
