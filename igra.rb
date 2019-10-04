@@ -1,6 +1,6 @@
 class Player
-	attr_accessor :player_hp, :player_mana, :player_strength, :player_dexility, :player_intellect, :player_physics, :player_vitality, :player_weapon, :player_clothing, :player_inventory, :player_gold, :player_dyn_hp, :player_dyn_mana, :player_spells, :spell_equiped
-	def initialize(player_hp, player_mana, player_strength, player_dexility, player_intellect, player_physics, player_vitality, player_weapon, player_clothing, player_inventory, player_gold, player_dyn_hp, player_dyn_mana, player_spells, spell_equiped)
+	attr_accessor :player_hp, :player_mana, :player_strength, :player_dexility, :player_intellect, :player_physics, :player_vitality, :player_weapon, :player_clothing, :player_inventory, :player_gold, :player_dyn_hp, :player_dyn_mana, :player_spells, :spell_equiped, :places_player_visited, :npcs_player_seen_before, :locations_player_visited
+	def initialize(player_hp, player_mana, player_strength, player_dexility, player_intellect, player_physics, player_vitality, player_weapon, player_clothing, player_inventory, player_gold, player_dyn_hp, player_dyn_mana, player_spells, spell_equiped, places_player_visited, npcs_player_seen_before, locations_player_visited)
 		@player_hp=player_hp 
 		@player_mana=player_mana
 		@player_strength=player_strength
@@ -16,6 +16,9 @@ class Player
 		@player_dyn_mana = player_dyn_mana
 		@player_spells = player_spells
 		@spell_equiped = spell_equiped
+		@places_player_visited = places_player_visited
+		@npcs_player_seen_before = npcs_player_seen_before
+		@locations_player_visited = locations_player_visited
 	end
 end
 
@@ -152,8 +155,8 @@ class Place
 end
 
 class Npc
-	attr_accessor :npc_name, :npc_sells, :npc_trade, :npc_gold, :seen_player_before, :things_npc_buy
-	def initialize(npc_name, npc_sells, npc_trade, npc_gold, seen_player_before, things_npc_buy)
+	attr_accessor :npc_name, :npc_description, :npc_sells, :npc_trade, :npc_gold, :npc_norm_gold, :seen_player_before, :things_npc_buy
+	def initialize(npc_name, npc_description, npc_sells, npc_trade, npc_gold, npc_norm_gold, seen_player_before, things_npc_buy)
 		@npc_name = npc_name
 		@npc_description = npc_description
 		@npc_sells = npc_sells
@@ -170,7 +173,7 @@ end
 @fire_clot_spell = Damage_spell.new("fire clot", "an easiest fire spell. doesnt do a lot of damage, but is a good choise for a beginning mage.", "fire spell", 20, 15, 4)
 @icicle_spell = Damage_spell.new('icicle', "an easiest spell. doesnt do a lot of damage, but is a good choise for a beginner.", "ice spell", 20, 15, 4)
 @no_spell = Damage_spell.new("no spell", false, false, false, false, 0)
-
+@venom_droplet_spell = Damage_spell.new("venom droplet", "an easiest poison spell, doesnt do a lot of damag, but easy to cast", "poison spell", 20, 15, 4)
 
 @barefists = Weaponitem.new('bare fists, lol, why would you try to see its description?', "bare fists", "refuse", 'lol',  "what?", 0, "F", "F", 0, 0, 0, 0, 0)
 @barebody = Clothingitem.new('bare body, lol', "bare body", "refuse", 'lol', "what?", 0, 0) 
@@ -180,7 +183,7 @@ end
 @iron_great_sword = Weaponitem.new('not every human can use this giant sword. made of iron. deals 46 of damage, costs 75 of gold, you`ll need 5 str, 3 dex, 4 phys', "iron great sword", 75, 5, "equipable as weapon", 46, "E", "B", 1, 4, 5, 3, 4)
 @iron_mace = Weaponitem.new('mace, made of iron. perfect balance between damage and speed. deals 30 of damage. costs 65 of gold, you`ll need 3 str, 2 dex, 2 phys' ,"iron mace", 65, 6, "equipable as weapon", 30, "D", "C", 2, 3, 3, 2, 2)
 @iron_dagger = Weaponitem.new('dagger, perfect for stabbing someone in the back. made of iron. deals 15 of damage, costs 40 of gold, you`ll need 1 str, 1 dex, 1 phys', "iron dagger", 40, 7, "equipable as weapon", 15, "B", "E", 4, 1, 1, 1, 1) 
-@spider_teeth = Weaponitem.new('', 'small spider`s teeth', false, false, false, 60, "B", "B", 4, 4, 0, 0, 0)
+@spider_teeth = Weaponitem.new('', 'small spider`s teeth', false, false, false, 30, "B", "B", 4, 4, 0, 0, 0)
 @steel_dagger = Weaponitem.new('dagger, but made of steel. still good for those who cant hold something bigger, deals 20 of damage, costs 60 of gold, you`ll need 1 str, 1 phys, 1 dex', "steel dagger", 60,  15, "equipable as weapon", 20, "B", "D", 4, 2, 1, 1, 1)
 
 @player_weapon = 0
@@ -196,16 +199,19 @@ end
 
 @healing_pills = Healingitem.new('magic pills, that produce energy, which helps travellers in their journey. regenerates 25 hp, cost 50 of gold', "healing pills", 50, 0, 25, "yes", "hp") 
 @gold_nugget = Item.new('a gold nugget. have no idea why would you need it. but it ... shines ...and... its made of gold. costs 400 of gold', "gold nugget", 400, 1, "no")  
+@spider_chitin = Item.new( 'a piece of spider`s chitin. costs 70 of gold.', 'spider`s chitin', 70, 17, "no" )
 @masterkey = Item.new(' good old masterkey.be careful with it. for using this simple thing for too much, you may be inprisoned!, costs 10 of gold', "masterkey", 10, 2, "no")
 @loaf_of_bread = Healingitem.new('a freshly bake... an old and hard loaf of bread. you must be starving, if you decided to eat it.regens 5 hp. costs 5 of gold' , "loaf of bread", 5, 3, 5, "yes", "hp") 
 @twilight_powder = Healingitem.new('a powder, made of flowers, collected at the special time, during the ywilights. restores 15 mana points, costs 50 of gold', "twilight powder", 50, 12, 15, 'yes', 'mana')
 @fire_clot_spell_scroll = Spellscroll.new("a scroll with a simple fire clot spell.", "fire clot scroll", 60, 13, "yes", @fire_clot_spell)
 @icicle_spell_scroll = Spellscroll.new("a scroll with a simple fire clot spell.", "icicle spell scroll", 60, 14, "yes", @icicle_spell)
+@venom_droplet_spell_scroll = Spellscroll.new("a scroll woth a simple venom droplet spell", "venom droplet spell scroll", 60, 16, "yes", @venom_droplet_spell)
+@spider_venom = Item.new( 'Some spider`s venom. You can easily find some stronger poisons if yo need so. costs 15 of gold', 'spider`s venom', 15, 18, "no")
 
-@camper_thief = Enemy.new("human", @iron_dagger, @thief_clothing, "Garret the mean thief", 130, 130, 60, 60, 6, 5, 125, [{@healing_pills => 2}], 100, 100, 100, 100, true, true, [@icicle_spell])
-@cave_spider_small = Enemy.new("insect", @spider_teeth, @small_spider_panzer, "Small cave spider", 275, 275, 0, 0, 15, 10, 0, [{@spider_chitin => 2}, {@spider_venom => 1}], 50, 0, 80, 150, false, false, [])
+@camper_thief = Enemy.new("human", @iron_dagger, @thief_clothing, "Garret the mean thief", 130, 130, 60, 60, 4, 3, 125, [{@healing_pills => 2}], 100, 100, 100, 100, true, true, [@icicle_spell])
+@cave_spider_small = Enemy.new("insect", @spider_teeth, @small_spider_panzer, "Small cave spider", 275, 275, 1, 1, 4, 5, 0, [{@spider_chitin => 2}, {@spider_venom => 1}], 50, 0, 80, 150, false, false, [])
 
-@osthorn_oloric = Npc.new("Osthorn Oloric", true, [{@healing_pills => 15}, {@twilight_powder => 8}, {@steel_dagger => 2}, [@icicle_spell_scroll => 4]], 400, 450, false, 0)
+@osthorn_oloric = Npc.new("Osthorn Oloric", "A funny-looking man, wearing some old clothes. His eyes start shining, when he sees gold.",true, [{@healing_pills => 15}, {@twilight_powder => 8}, {@steel_dagger => 2}, {@icicle_spell_scroll => 4}], 400, 450, false, ["Healingitem", "Weaponitem", "Clothingitem"])
 
 
 @vortex_peak_enter = Place.new("vortex peak enter", " an edge of a cliff. really beautiful sight out from here. you can see somethi... No. too far to see anything.", [{@healing_pills => 2}], [], {}, false, [])
@@ -214,15 +220,15 @@ end
 
 
 
-@darkcave_enter = Place.new(" dark cave enter", "an enter in the tunnel-looking cave.", [{@loaf_of_bread => 2}, {@iron_straight_sword => 1}], [], {@vortex_peak => @vortex_peak_exit}, false, [])
+@darkcave_enter = Place.new("dark cave enter", "an enter in the tunnel-looking cave.", [{@loaf_of_bread => 2}, {@iron_straight_sword => 1}], [], {@vortex_peak => @vortex_peak_exit}, false, [])
 @darkcave_lake_room = Place.new("room with lake", "a room with a big and bottomless-looking lake.", [{@healing_pills => 1}], [@cave_spider_small], {}, false, [])
 @darkcave_spider_room = Place.new("spider cave", "room that seems to be a spider`s home. a few corpses are stuck in the spider nets.", [{@iron_dagger => 2}, {@thief_clothing => 1}, {@twilight_powder => 1}, {@healing_pills => 2}], [@cave_spider_small, @cave_spider_small, @cave_spider_small], {}, false, [])
 @darkcave_exit = Place.new("dark cave exit", "the end of the tunnel, the light can be seen from here", [], [], false, false, [])
-@darkcave_osthorns_room = Place.new("Osthorn`s room", "A room in a dark cave, occupied by a trader, called Osthorn. inside it can be seen a bed, chairs, chest and table", [], [], {}, false, [])
+@darkcave_osthorns_room = Place.new("Osthorn`s room", "A room in a dark cave, occupied by a trader, called Osthorn. inside it can be seen a bed, chairs, chest and table", [], [], {}, false, [@osthorn_oloric])
 
 @vortex_peak = Location.new("an antient mysterious peak, out of where, by some reason, strangers  sometimes go out of. strangers who dont remember anything about who are they or why are they here...", false, "vortex peak", [@vortex_peak_enter, @vortex_peak_exit, @giant_rock])
 
-@darkcave = Location.new("a dark and long tunnel, whith few rooms in it. In the end of it can be seen light.", false, "dark cave", [@darkcave_enter, @darkcave_lake_room, @darkcave_spider_room, @darkcave_exit])
+@darkcave = Location.new("a dark and long tunnel, whith few rooms in it. In the end of it can be seen light.", false, "dark cave", [@darkcave_enter, @darkcave_lake_room, @darkcave_spider_room, @darkcave_exit, @darkcave_osthorns_room])
 
 
 @vortex_peak_exit.place_go_out = {@darkcave => @darkcave_enter}
@@ -364,6 +370,11 @@ def pick_items
 	@inventory[@bounty_hunter_clothing.item_inv_nbr][@bounty_hunter_clothing] = 0
 	@inventory[@twilight_powder.item_inv_nbr][@twilight_powder] = 0
 	@inventory[@fire_clot_spell_scroll.item_inv_nbr][@fire_clot_spell_scroll] = 0
+	@inventory[@steel_dagger.item_inv_nbr][@steel_dagger] = 0
+	@inventory[@icicle_spell_scroll.item_inv_nbr][@icicle_spell_scroll] = 0
+	@inventory[@venom_droplet_spell_scroll.item_inv_nbr][@venom_droplet_spell_scroll] = 0
+	@inventory[@spider_chitin.item_inv_nbr][@spider_chitin] = 0
+	@inventory[@spider_venom.item_inv_nbr][@spider_venom] = 0 
 
 	puts 'healing pills(costs 50 of gold)   (insert 1)'
 	puts 'loaf of bread(costs 5 of gold)   (insert 2)'
@@ -686,6 +697,11 @@ def location_show
 			smth.location_places.each do |diff|                                                                           
 				if diff.playerhere == true                                                                                       
 					puts "LOCATION : |#{smth.location_name}|, PLACE : |#{diff.place_name}|"
+					if diff.place_npcs != []
+						npcs = "Yes"
+					else
+						npcs = "No"
+					end
 					diff.place_items.each do |hh|
 						hh.keys.each do |key|
 							if hh[key] != 0 and diff.place_items != []
@@ -696,11 +712,12 @@ def location_show
 						end
 					end
 					puts "can here be found any items? #{can}"	
+					puts "can here be founf any npcs? #{npcs}"
 				end 																																																			
 			end 																																																						
 		end 																																																								
 	end
-
+	#puts @player.npcs_player_seen_before
 	@locations.each do |smth|																																																	
 		if smth.playerhere == true
 			puts "you can also go to this places:"																																													
@@ -1064,8 +1081,8 @@ def battle_enemy_agressive_do
 
 
 	else
-		puts "#{@enemy_you_fight.enemy_name} attacks you! and deals #{(@enemy_you_fight.enemy_weapon.weapon_damage - (@enemy_you_fight.enemy_weapon.weapon_damage * @player.player_clothing.clothes_protection * 0.01) + (@enemy_you_fight.enemy_weapon.weapon_damage *  @enemy_you_fight.enemy_weapon.cif_dex_scale * (@player.player_dexility - 2) * 0.1) +(@enemy_you_fight.enemy_weapon.weapon_damage * @enemy_you_fight.enemy_weapon.cif_strength_scale * (@player.player_strength - 2) * 0.1))} hp of damage"
-		@player.player_dyn_hp -= (@enemy_you_fight.enemy_weapon.weapon_damage - (@enemy_you_fight.enemy_weapon.weapon_damage * @player.player_clothing.clothes_protection * 0.01) + (@enemy_you_fight.enemy_weapon.weapon_damage *  @enemy_you_fight.enemy_weapon.cif_dex_scale * (@player.player_dexility - 2) * 0.1) +(@enemy_you_fight.enemy_weapon.weapon_damage * @enemy_you_fight.enemy_weapon.cif_strength_scale * (@player.player_strength - 2) * 0.1))
+		puts "#{@enemy_you_fight.enemy_name} attacks you! and deals #{(@enemy_you_fight.enemy_weapon.weapon_damage - (@enemy_you_fight.enemy_weapon.weapon_damage * @player.player_clothing.clothes_protection * 0.01) + (@enemy_you_fight.enemy_weapon.weapon_damage *  @enemy_you_fight.enemy_weapon.cif_dex_scale * (@enemy_you_fight.enemy_dexility) * 0.1) +(@enemy_you_fight.enemy_weapon.weapon_damage * @enemy_you_fight.enemy_weapon.cif_strength_scale * (@enemy_you_fight.enemy_strength) * 0.1))} hp of damage"
+		@player.player_dyn_hp -= (@enemy_you_fight.enemy_weapon.weapon_damage - (@enemy_you_fight.enemy_weapon.weapon_damage * @player.player_clothing.clothes_protection * 0.01) + (@enemy_you_fight.enemy_weapon.weapon_damage *  @enemy_you_fight.enemy_weapon.cif_dex_scale * (@enemy_you_fight.enemy_dexility) * 0.1) +(@enemy_you_fight.enemy_weapon.weapon_damage * @enemy_you_fight.enemy_weapon.cif_strength_scale * (@enemy_you_fight.enemy_strength) * 0.1))
 
 	end
 end
@@ -1092,7 +1109,8 @@ end
 
 
 def start_npc_talk
-	puts "ALL NPC HERE:"
+	dr = 0
+	puts "ALL NPC`s HERE:"
 	@locations.each do |location|
 		if location.playerhere == true
 			location.location_places.each do |place|
@@ -1108,6 +1126,10 @@ def start_npc_talk
 	print "whome would you like to talk to?"
 	talk_to = gets.chomp
 
+	if talk_to == "how does he look"
+		npc_descript
+	end
+
 	@locations.each do |location|
 		if location.playerhere == true
 			location.location_places.each do |place|
@@ -1115,7 +1137,48 @@ def start_npc_talk
 					place.place_npcs.each do |npc|
 						if npc.npc_name == talk_to
 							@npc_you_talk_now = npc
+							@player.npcs_player_seen_before.each do |nepis|
+								if nepis == npc.npc_name
+									dr = 1
+								end
+							end
+							if dr == 0
+								@player.npcs_player_seen_before << npc.npc_name
+							end
 							npc_talk_menu
+						end
+					end
+				end
+			end
+		end
+	end
+	@locations.each do |locat|
+		if locat.playerhere == true
+			locat.location_places.each do |plac|
+				plac.place_npcs.each do |npce|
+					if npce.npc_name == @npc_you_talk_now.npc_name
+						npce = @npc_you_talk_now
+					end
+				end
+			end
+		end
+	end
+	@npc_you_talk_now.seen_player_before = true
+	@npc_you_talk_now = false
+end
+
+
+
+def npc_descript
+	puts "which npc do you want to describe"
+	descript_whome = gets.chomp
+	@locations.each do |location|
+		if location.playerhere == true
+			location.location_places.each do |place|
+				if place.playerhere == true
+					place.place_npcs.each do |nepis|
+						if nepis.npc_name == descript_whome
+							puts nepis.npc_description
 						end
 					end
 				end
@@ -1125,24 +1188,66 @@ def start_npc_talk
 end
 
 
+
+
+
+
+
 def npc_talk_menu
+	answer = 0
 	puts "You come closer to #{@npc_you_talk_now.npc_name}"
-	puts "What would you like to do?"
-	puts "TALK (insert talk)"
-	if @npc_you_talk_now.npc_sells == true
-		puts "TRADE (insert trade)"
+	if @npc_you_talk_now.seen_player_before == false
+
+
+
+		if @npc_you_talk_now.npc_name == "Osthorn Oloric"
+			osthorn_oloric_first_time_talk
+		end
+		
+
+
+
+
 	end
-	print "insert your answer:"
-	answer = gets.chomp
-		if answer == "talk"
+	while answer != "goodbye"
 
 
-
+		puts "What would you like to do?"
+		puts "TALK (insert talk)"
+		if @npc_you_talk_now.npc_sells == true
+			puts "TRADE (insert trade)"
 		end
+		puts "ASK (insert ask)"
+		print "insert your answer:"
+		answer = gets.chomp
+			if answer == "talk"
 
-		if answer == "trade" and @npc_you_talk_now.npc_sells == true
-			npc_trading
-		end
+
+
+				if @npc_you_talk_now.npc_name == "Osthorn Oloric"
+					osthorn_rand = rand(1..2)
+					if osthorn_rand == 1
+						osthorn_oloric_talk_1
+					end
+					if osthorn_rand == 2
+						osthorn_oloric_talk_2
+					end
+				end
+
+
+
+
+			end
+
+			if answer == "trade" and @npc_you_talk_now.npc_sells == true
+				trade
+			end
+			if answer == "ask"
+				ask
+			end
+
+
+	end
 end
 
 
@@ -1162,28 +1267,109 @@ def trade
 end
 
 
-def npc_buy_your
-	puts "here what you can sell to this npc"
-	if @npc_you_talk_now.things_npc_buy != false
-		@player.player_inventory.each do |hash|
-			hash.keys.each do |itm|
-				@npc_you_talk_now.things_npc_buy.each do |classname|
-					if classname == itm.class.name
-						if hash[itm] != 0
-							puts "#{itm.item_name}  X#{hash[itm]}"
+
+
+
+def ask
+	puts "What do you want to ask #{@npc_you_talk_now.npc_name} about?"
+	puts "About some NPC (ins 1)"
+	puts "About some place (ins 2)"
+	puts "About some location? (ins 3)"
+	answ = gets.to_i
+	if answ == 1
+		ask_npc_about_npc
+	end
+	if answ == 2
+		ask_npc_about_place
+	end
+	if answ == 3
+		ask_npc_about_location
+	end
+end
+
+
+def ask_npc_about_npc
+	propper = 0
+	puts "Here are Npcs you can ask this Npc about:"
+	@player.npcs_player_seen_before.each do |npcname|
+		puts npcname
+	end
+	puts "So whats it gonna be?"
+	which_npc = gets.chomp
+	@player.npcs_player_seen_before.each do |npcname|
+		if npcname == which_npc
+			@locations.each do |location|
+				location.location_places.each do |place|
+					place.place_npcs.each do |npc|
+						if npcname == npc.npc_name
+							propper =1 
+
+							#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Osthorn Oloric~~~~~~~~
+							if @npc_you_talk_now.npc_name == "Osthorn Oloric"
+
+
+
+
+
+
+								if npcname == "Osthorn Oloric"
+									osthorn_oloric_ask_self
+								end
+
+
+
+
+							end
+							#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 						end
 					end
 				end
 			end
 		end
-	else
-		@player.player_inventory.each do |hash|
-			hash.keys.each do |itm|
-				if hash[itm] != 0
-					puts "#{itm.item_name}  X#{hash[itm]}"
+	end
+	if propper == 0
+		puts "Something went wrong!"
+	end
+end
+
+
+
+
+
+def ask_npc_about_place
+	propper = 0
+	puts "Here are places you can ask this Npc about:"
+	@player.places_player_visited.each do |placename|
+		puts placename
+	end
+	puts "So whats it gonna be?"
+	wich_place = gets.chomp
+	@player.places_player_visited.each do |placename|
+		if placename == wich_place
+			@locations.each do |location|
+				location.location_places.each do |place|
+					if placename == place.place_name
+						propper = 1
+						#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Osthorn Oloric
+						if @npc_you_talk_now.npc_name == "Osthorn Oloric"
+
+
+							if placename == @vortex_peak_enter.place_name
+								osthorn_oloric_ask_vortexpeakenter
+							end
+
+
+
+
+						end
+						#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					end
 				end
 			end
 		end
+	end
+	if propper == 0
+		puts "Something went wromg!!!"
 	end
 end
 
@@ -1201,6 +1387,268 @@ end
 
 
 
+
+
+
+
+def ask_npc_about_location
+	propper = 0
+	puts "Here are the loctions you can ask this Npc about:"
+	@player.locations_player_visited.each do |locationname|
+		puts locationname
+	end
+	puts "So what its gonna be?"
+	which_place = gets.chomp
+	@player.locations_player_visited.each do |locationname|
+		if locationname == which_place
+			@locations.each do |location|
+				if location.location_name == locationname
+					propper = 1
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Osthorn Oloric
+
+					if @npc_you_talk_now.npc_name == "Osthorn Oloric"
+
+						if locationname == @vortex_peak.location_name
+							osthorn_oloric_ask_vortexpeak
+						end
+						if locationname == @darkcave.location_name
+							osthorn_oloric_ask_darkcave
+						end
+
+
+
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+					end
+				end
+			end
+		end
+	end
+	if propper == 0
+		puts "something went wrong!"
+	end
+end
+
+
+
+
+
+
+
+def npc_buy_your
+	okay_ill_buy_it = 0
+	transaction_complete = 0
+	puts "here what you can sell to this npc"
+	if @npc_you_talk_now.things_npc_buy != false
+		@player.player_inventory.each do |hash|
+			hash.keys.each do |itm|
+				@npc_you_talk_now.things_npc_buy.each do |classname|
+					if classname == itm.class.name
+						if hash[itm] != 0
+							puts "#{itm.item_name}  X#{hash[itm]} for #{(itm.item_price*0.85).to_i} of gold"
+						end
+					end
+				end
+			end
+		end
+		puts "What would you like to sell? to exit, insert smth random here"
+		selling = gets.chomp
+		puts "how many?"
+		quantity = gets.to_i
+		@player.player_inventory.each do |hash|
+			hash.keys.each do |itm|
+				if selling == itm.item_name and hash[itm] != 0 and hash[itm] == quantity
+					@npc_you_talk_now.things_npc_buy.each do |classname|
+						if itm.class.name == classname
+							okay_ill_buy_it = 1
+						end
+					end
+					if okay_ill_buy_it == 1 and @npc_you_talk_now.npc_gold >= (itm.item_price * 0.85 * quantity).to_i
+						hash[itm] -= quantity
+						@player.player_gold += (itm.item_price * 0.85 * quantity).to_i
+						@npc_you_talk_now.npc_trade.each do |hash2|
+							hash2.keys.each do |itm2|
+								if itm == itm2
+									hash2[itm2] += quantity
+									transaction_complete = 1
+								end
+							end
+						end 
+						if transaction_complete != 1
+							@npc_you_talk_now.npc_trade << {itm => quantity}
+						end
+						@npc_you_talk_now.npc_gold -= (itm.item_price * 0.85 * quantity).to_i
+					else
+						puts "something went wrong!!!"
+					end
+				end
+			end
+		end
+	else
+		puts "You`ve got nothing he`d like to buy!"
+	end 
+end
+
+
+
+
+
+def npc_sell_to_you
+	puts "here what you can buy:"
+	@npc_you_talk_now.npc_trade.each do |hash|
+		hash.keys.each do |itm|
+			if hash[itm] != 0
+				puts "#{itm.item_name}  X#{hash[itm]}   for #{(itm.item_price * 1.25).to_i} of gold each"
+			end
+		end
+	end
+	puts "what would you like to buy?"
+	ill_buy = gets.chomp
+	puts "how many?"
+	quantity = gets.to_i
+	@npc_you_talk_now.npc_trade.each do |hash|
+		hash.keys.each do |itm|
+			if ill_buy == itm.item_name and hash[itm] >= quantity
+				if @player.player_gold >= (itm.item_price * 1.25 * quantity).to_i
+					hash[itm] -= quantity
+					@player.player_gold -= (itm.item_price * 1.25 * quantity).to_i
+					@npc_you_talk_now.npc_gold += (itm.item_price * 1.25 * quantity).to_i
+					@player.player_inventory.each do |hash2|
+						hash2.keys.each do |itm2|
+							if itm2.item_name == itm.item_name
+								hash2[itm2] += quantity
+								puts "You`ve bought #{quantity} #{itm.item_name} for #{(itm.item_price * 1.25 * quantity).to_i} of gold"
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+
+#--------------------------------------- Osthorn Oloric`s talks--------------------------------------- 
+
+
+def osthorn_oloric_first_time_talk
+	puts "	Oh! A new face!"
+	sleep 0.8
+	puts "	Well, new man - new buyer"
+	sleep 1
+	puts "	So?!"
+	sleep 0.7
+	puts "	What are you waiting for?"
+	sleep 0.6
+	puts "	Come on, buy something!"
+	sleep 0.7
+end
+
+def osthorn_oloric_talk_1
+	puts "	Well, Glad to meet you!"
+	sleep 0.7
+	puts "	I don`t want to be too intrusive, but if you`ll buy something right now..."
+	sleep 0.6
+	puts "	Well, you`ll make my day by that simple action!"
+	sleep 0.7
+end
+
+
+def osthorn_oloric_talk_2
+	puts "	Hey! My favorite buyer!"
+	sleep 0.7
+	puts "	You`re here to buy somethig, aren`t you.....?"
+	sleep 1.3
+	puts "	Well, this pause was way too big. Come on, look what ive got!"
+	sleep 0.7
+end
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Osthorn Oloric`s asks
+def osthorn_oloric_ask_vortexpeak
+	sleep 0.8
+	puts "well... It`s an antient peak..."
+	sleep 1
+	puts "The legends say that it is the oldest thing in this world."
+	sleep 1.2
+	puts "But just a mounth ago, some strange things started to happen here..."
+	sleep 1.5
+	puts "Strangers go down from the top of the peak..."
+	sleep 1
+	puts "Strangers, who don`t even remember who they are!"
+	sleep 1.3
+	puts "But they always have some gold and equipment with them!"
+	sleep 1.6
+	puts "So I moved here to trade with them!"
+	sleep 1
+end
+
+
+def osthorn_oloric_ask_darkcave
+	sleep 0.7
+	puts "It`s a long tunnel-shaped cave."
+	sleep 1
+	puts "Living on a cliff would be too cold and snowy for me, so when I was looking for a place to stop, I chose rhis cave."
+	sleep 1.3
+	puts "But this cave is pretty dangerous!"
+	sleep 1
+	puts "Some spiders found a shelter in the neighbour rooms!"
+	sleep 1
+	puts "This cave is the only way to go down the peak, so if you want to go down from here and to go to some city, then you gotta go through this tunnel straight to the exit!"
+end
+
+
+
+def osthorn_oloric_ask_self
+	sleep 1.2
+	puts "Well... Its me!"
+	sleep 1
+	puts "I am Osthorn Oloric!"
+	sleep 1
+	puts "An ordinary merchant, who is trying to survive in this cruel world!"
+	sleep 1
+	puts "And as you heard from me before, buying my goods will be really appreciated by me!"
+	sleep  1
+	puts "So, would you like to see my goods?"
+	sleep 0.7
+end
+
+
+
+def osthorn_oloric_ask_vortexpeakenter
+	sleep 0.7
+	puts "Its the top of the ancient Vortex Peak"
+	sleep 0.8
+	puts "I got up there, while looking for the shelter."
+	sleep 0.9
+	puts "The landscape there is really stunning..."
+	sleep 0.8
+	puts "But I didn`t stand there for a long time - it was too cold for me."
+	sleep 0.9
+	puts "Avoid the Giant rock, wich lays on the way to the cave`s enter!"
+	sleep 0.8
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#-----------------------------------------------------------------------------------------------------------
 
 
 
@@ -1278,6 +1726,8 @@ end
 
 
 def go_to
+	tr = 0
+	tr1  = 0
 	print 'where do you want to go:  '
 	place = gets.chomp
 	@locations.each do |smth|
@@ -1289,7 +1739,20 @@ def go_to
 				if diff.playerhere == true and diff.place_name != place
 					diff.playerhere = false
 					puts "moved!"
-					
+					@player.places_player_visited.each do |placename|
+						if placename == diff.place_name
+							tr = 1
+						end
+						if place == placename
+							tr1 = 1
+						end
+					end
+					if tr == 0
+						@player.places_player_visited << diff.place_name
+					end
+					if tr1 == 0
+						@player.places_player_visited << place
+					end
 				end
 			end
 		end
@@ -1299,21 +1762,37 @@ def go_to
 end
 
 def move_to
+	need_to_add = 1
+	just_moved = 0
 	@locations.each do |smth|
 		smth.location_places.each do |diff|
 			if smth.playerhere == true and diff.playerhere == true
 				if diff.place_go_out != false
-					print "where do you want to move?"
-					location = gets.chomp
-					diff.place_go_out.keys.each do |plac|
-						if plac.location_name == location
-							smth.playerhere = false
-							diff.playerhere = false
-							diff.place_go_out[plac].playerhere = true
-							plac.playerhere = true
-							puts "moved!"
-							location_show
-							break
+					if just_moved != 1
+						print "where do you want to move?"
+						location = gets.chomp
+						diff.place_go_out.keys.each do |plac|
+							if plac.location_name == location
+								smth.playerhere = false
+								diff.playerhere = false
+								diff.place_go_out[plac].playerhere = true
+								plac.playerhere = true
+								@player.locations_player_visited.each do |locationname|
+									if locationname == location
+										need_to_add = 0
+									end
+								end
+								if need_to_add == 1
+									@player.locations_player_visited << location
+								end
+								puts "moved!"
+								location_show
+								just_moved = 1
+								break
+								#break
+								#break
+								#break
+							end
 						end
 					end
 				end
@@ -1474,6 +1953,10 @@ def console
 			move_to
 		end
 
+		if @console == "look for talkers"
+			start_npc_talk
+		end
+
 
 		if @deaded == "YOU ARE DEAD"
 			puts "better luck next time!"
@@ -1490,6 +1973,8 @@ end
 def show_commands
 puts"====================================================================================================================================="
 puts "ALL COMMANDS IN OUR GAME:                                                                                                          |"
+puts "look for talkers => show all npcs and asking if you wanna talk to one of em                                                        |"
+puts "look for talkers => how does he look => npc name => description                                                                    |"
 puts "commands => show all commands                                                                                                      |"
 puts "show stats => show player stats                                                                                                    |"
 puts "show equipment => show player equipment                                                                                            |"
@@ -1508,7 +1993,7 @@ puts "equip spell => insert spell name => equips spell                          
 puts "unequip spell => unequips equiped spell                                                                                            |"
 puts "go to => insert place name => player moves to another place                                                                        |"
 puts "move to => leave your location, go to another one                                                                                  |"
-puts "location description (or ld) => show location and place description                                                                |"																														
+puts "location description (or ld) => show location and place description                                                                |"
 puts "search => you are trying to search some items in place, where you stand.                                                           |"
 puts "use => shows all usable items => insert item`s name																																								 |"
 puts"====================================================================================================================================="
@@ -1520,7 +2005,7 @@ pick_weapon
 pick_items
 
 
-@player = Player.new(@a, @b, @player_strength, @player_dexility, @player_intellect, @player_physics, @player_vitality, @barefists, @barebody, @inventory, @player_gold, @a, @b, [@no_spell], @no_spell)  
+@player = Player.new(@a, @b, @player_strength, @player_dexility, @player_intellect, @player_physics, @player_vitality, @barefists, @barebody, @inventory, @player_gold, @a, @b, [@no_spell], @no_spell, [@vortex_peak_enter.place_name], [], [@vortex_peak.location_name])  
 @player.player_inventory.each do |hash|
 	hash.keys.each do |itm|
 		if itm.item_name == @player_weapon.item_name
@@ -1567,7 +2052,7 @@ end
 
 
 
-#    TI DOLZHEN  SDELAT PEREHODI MEZHDY LOCATIANMI,   SOZDAT NPC, SOZDAT DIALOGI, sozdat magiu , NAMYTIT CONTENTA
+#    TI DOLZHEN   sdelat voprosi,i of corse - NAMYTIT CONTENTA
 
 
 
